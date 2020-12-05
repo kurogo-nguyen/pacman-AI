@@ -100,31 +100,34 @@ def depthFirstSearch(problem):
             visited.append(currentNode)
             if problem.isGoalState(currentNode):
                 return actions
-            for next_node, action, stepCost in problem.getSuccessors(currentNode):
+            for next_node, action, _ in problem.getSuccessors(currentNode):
+                if currentNode in visited:
                     query.push((next_node, actions+[action]))
 
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-
+    # print("problem:" + str(problem) + " end")
     start = problem.getStartState()
     query = util.Queue()
     visited = []
-    # actions = []
     query.push((start, []))
     while not query.isEmpty():
+        # print(str(query.list))
         (currentNode, actions) = query.pop()
         if currentNode not in visited:
             visited.append(currentNode)
             if problem.isGoalState(currentNode):
+                # print(actions)
                 return actions
-            for next_node, action, stepCost in problem.getSuccessors(currentNode):
+            for next_node, action, _ in problem.getSuccessors(currentNode):
+                if currentNode in visited:
                     query.push((next_node, actions + [action]))
 
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
 
 
 def uniformCostSearch(problem):
@@ -134,7 +137,6 @@ def uniformCostSearch(problem):
     start = problem.getStartState()
     query = util.PriorityQueue()
     visited = []
-    # actions = []
     query.push((start, [], 0),0)
     while not query.isEmpty():
         (currentNode, actions, cost) = query.pop()
@@ -146,7 +148,7 @@ def uniformCostSearch(problem):
                 if next_node not in visited:
                     query.push((next_node, actions + [action], cost+stepCost), cost+stepCost)
 
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
 
 
 def nullHeuristic(state, problem=None):
@@ -166,14 +168,15 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     query.push((start, [], 0), 0)
     while not query.isEmpty():
         (currentNode, actions, cost) = query.pop()
+        # print(currentNode)
         if currentNode not in visited:
             visited.append(currentNode)
             if problem.isGoalState(currentNode):
                 return actions
             for next_node, action, stepCost in problem.getSuccessors(currentNode):
-                query.push((next_node, actions + [action], cost + stepCost), cost + stepCost + heuristic(next_node, problem))
+                query.push((next_node, actions + [action], cost + stepCost), problem.getCostOfActions(actions + [action]) + heuristic(next_node, problem))
 
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
 
 
 # Abbreviations
